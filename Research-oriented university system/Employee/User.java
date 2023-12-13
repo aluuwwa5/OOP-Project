@@ -2,39 +2,91 @@ package Employee ;
 
 import java.util.Objects;
 import java.util.Scanner;
+
+
 import java.io.*;
 
 public class User implements NewsObserver, Cloneable,Serializable
 {
 	
-	private String userName;
-	private int password;
-	public Language language;
-	public User(){
-		
-	}
-     
-	public User(String userName, int password, Language language) {
-		this();
-		this.userName = userName;
-		this.setPassword(password);
-		this.language = language;
-	}
-	
-	public int getPassword() {
-		return password;
-	}
+	 private String name;
+	    private String surname;
+	    private String birthDate;
+	    private String phoneNumber;
+	    private String login;
+	    private String password;
 
-	public void setPassword(int password) {
-		this.password = password;
-	}
-	
-	public String getUserName() {
-		return userName;
-	}
+	    public User() {
 
+	    }
+	    public User(String name, String surname, String birthDate, String phoneNumber, String login, String password) {
+	        this.name = name;
+	        this.surname = surname;
+	        this.birthDate = birthDate;
+	        this.phoneNumber = phoneNumber;
+	        this.login = login;
+	        this.password = password;
+	    }
+
+	    public User(String name, String surname, String birthDate, String phoneNumber, String login, String password) {
+	        this.name = name;
+	        this.surname = surname;
+	        this.birthDate = birthDate;
+	        this.phoneNumber = phoneNumber;
+	        this.login = login;
+	        this.password = password;
+	    }
 	
-	
+	    public String getName() {
+	        return this.name;
+	    }
+
+	    public void setName(String name) {
+	        this.name = name;
+	    }
+
+	    public String getSurname() {
+	        return this.surname;
+	    }
+
+	    public void setSurname(String surname) {
+	        this.surname = surname;
+	    }
+
+	    public String getBirthDate() {
+	        return this.birthDate;
+	    }
+
+	    public void setBirthDate(String birthDate) {
+	        this.birthDate = birthDate;
+	    }
+
+	    public String getPhoneNumber() {
+	        return this.phoneNumber;
+	    }
+
+	    public void setPhoneNumber(String phoneNumber) {
+	        this.phoneNumber = phoneNumber;
+	    }
+
+
+	    public String getLogin() {
+	        return this.login;
+	    }
+
+	    public void setLogin(String login) {
+	        this.login = login;
+	    }
+
+	    public String getPassword() {
+	        return this.password;
+	    }
+
+	    public void setPassword(String password) {
+	        this.password = password;
+	    }
+
+	   
 	public Language chooseLanguage() {
 		System.out.println("Select your language:");
         	System.out.println("1. KZ");
@@ -66,10 +118,9 @@ public class User implements NewsObserver, Cloneable,Serializable
     }
 	
 	
-	
-	public void login(String enteredName, String enteredPassword) throws LoginException {
-	    if (enteredName != null && enteredPassword != null) {
-	        if (enteredName.equals(getUserName()) && enteredPassword.equals(getPassword())) {
+	public void signin(String enteredLogin, String enteredPassword) throws LoginException {
+	    if (enteredLogin != null && enteredPassword != null) {
+	        if (enteredLogin.equals(getLogin()) && enteredPassword.equals(getPassword())) {
 	            handleSuccessfulLogin();
 	        } else {
 	            throw new LoginException("Invalid username or password");
@@ -88,32 +139,60 @@ public class User implements NewsObserver, Cloneable,Serializable
 	        throw new AdminLoginException("Admin logged in");
 	    }
 	}
+	 public boolean changePassword(String oldPassword, String newPassword) {
+	        if(oldPassword.equals(this.password)) {
+	            password = newPassword;
+	            return true;
+	        }
+	        return false;
+	 }
 	
-	@Override
-	public void update(News news) {
-	        System.out.println("Received a news update:");
-	        System.out.println(news);
-	    
-	}
-
-	public boolean equals(Object o) {
-		if(this == o) return true;
-		if(o == null) return false;
-		if(this.getClass() != o.getClass()) return false;
-		
-		User user = (User)o;
-		 return Objects.equals(userName, user.userName) && Objects.equals(language, user.language) && Objects.equals(getPassword(), user.getPassword());
-	}
-		
+	 public String viewNewsTab() {
+	        String ans = "";
+	        int i = 0;
+	        for (News news : Data.news) {
+	            i ++;
+	            ans += i + ") News title: " + news.getTitle() 
+	            + "\n    Description: " + news.getText() 
+	            + "\n    Post Date: " + news.getPostDate() + "\n\n";
+	        }
+	        return ans;
+	    }
 
 	protected Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
+	 @Override
+	    public boolean equals(Object o) {
+	        if (o == this)
+	            return true;
+	        if (!(o instanceof User)) {
+	            return false;
+	        }
+	        User user = (User) o;
+	        return Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(login, user.login) && Objects.equals(password, user.password);
+	    }
+
+	    @Override
+	    public int hashCode() {
+	        return Objects.hash(name, surname, birthDate, phoneNumber, login, password);
+	    }
+
+	    @Override
+	    public String toString() {
+	        return "{" +
+	            " name='" + getName() + "'" +
+	            ", surname='" + getSurname() + "'" +
+	            
+	            ", phoneNumber='" + getPhoneNumber() + "'" +
+	            ", login='" + getLogin() + "'" +
+	            ", password='" + getPassword() + "'" +
+	            "}";
+	    }
+
 	
-	@Override
-	public String toString() {
-		return "User [userName=" + userName + ", password=" + getPassword() + ", language=" + language + "]";
-	}
+	
+	
 
 	
 }
